@@ -1,0 +1,9 @@
+{
+  "short_name": "Student MS",
+  "name": "Student Management System",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0d6efd",
+  "background_color": "#ffffff"
+}
