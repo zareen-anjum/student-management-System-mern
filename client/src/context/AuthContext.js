@@ -58,15 +58,21 @@ export const AuthProvider = ({ children }) => {
    * Authenticate an existing user.
    */
   const login = useCallback(async (formData) => {
+  try {
     const data = await authService.login(formData);
 
     localStorage.setItem("sms_token", data.token);
     localStorage.setItem("sms_user", JSON.stringify(data.user));
 
     setUser(data.user);
+    toast.success("Login successful");
 
     return data;
-  }, []);
+  } catch (error) {
+    toast.error("Login failed. Please check your email and password.");
+    throw error;
+  }
+}, []);
 
   /**
    * Logout current user and clear stored session.
