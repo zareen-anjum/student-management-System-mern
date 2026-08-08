@@ -87,16 +87,19 @@ export const AuthProvider = ({ children }) => {
    * Logout current user and clear stored session.
    */
   const logout = useCallback(async () => {
+  try {
     await authService.logout();
-
+  } catch (error) {
+    console.error("Logout request failed:", error);
+  } finally {
     localStorage.removeItem("sms_token");
     localStorage.removeItem("sms_user");
 
     setUser(null);
 
     toast.info("You have been logged out");
-  }, []);
-
+  }
+}, []);
   /**
    * Update user information after profile changes.
    */
