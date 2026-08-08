@@ -20,8 +20,20 @@ const Profile = () => {
 
   // ---------- Profile Info ----------
   const handleProfileChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.value });
-  };
+    const { name, value } = e.target;
+
+    setProfileData({
+        ...profileData,
+        [name]: value,
+    });
+
+    if (profileErrors[name]) {
+        setProfileErrors({
+            ...profileErrors,
+            [name]: "",
+        });
+    }
+};
 
   const validateProfile = () => {
     const errors = {};
