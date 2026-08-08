@@ -44,15 +44,24 @@ export const AuthProvider = ({ children }) => {
    * Register a new user account.
    */
   const register = useCallback(async (formData) => {
-    const data = await authService.register(formData);
+    try {
+        const data = await authService.register(formData);
 
-    localStorage.setItem("sms_token", data.token);
-    localStorage.setItem("sms_user", JSON.stringify(data.user));
+        localStorage.setItem("sms_token", data.token);
+        localStorage.setItem("sms_user", JSON.stringify(data.user));
 
-    setUser(data.user);
+        setUser(data.user);
 
-    return data;
-  }, []);
+        toast.success("Registration successful!");
+
+        return data;
+    } catch (error) {
+        toast.error(
+            error?.response?.data?.message || "Registration failed. Please try again."
+        );
+        throw error;
+    }
+}, []);
 
   /**
    * Authenticate an existing user.
