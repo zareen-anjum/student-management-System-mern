@@ -20,8 +20,20 @@ const Profile = () => {
 
   // ---------- Profile Info ----------
   const handleProfileChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.value });
-  };
+    const { name, value } = e.target;
+
+    setProfileData({
+        ...profileData,
+        [name]: value,
+    });
+
+    if (profileErrors[name]) {
+        setProfileErrors({
+            ...profileErrors,
+            [name]: "",
+        });
+    }
+};
 
   const validateProfile = () => {
     const errors = {};
@@ -47,9 +59,20 @@ const Profile = () => {
 
   // ---------- Password ----------
   const handlePasswordChange = (e) => {
-    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
-  };
+    const { name, value } = e.target;
 
+    setPasswordData({
+        ...passwordData,
+        [name]: value,
+    });
+
+    if (passwordErrors[name]) {
+        setPasswordErrors({
+            ...passwordErrors,
+            [name]: "",
+        });
+    }
+};
   const validatePassword = () => {
     const errors = {};
     if (!passwordData.currentPassword) errors.currentPassword = "Current password is required";
