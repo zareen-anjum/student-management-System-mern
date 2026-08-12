@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
       minlength: [2, "Name must be at least 2 characters"],
       maxlength: [50, "Name cannot exceed 50 characters"],
     },
+
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -21,43 +22,54 @@ const UserSchema = new mongoose.Schema(
         "Please provide a valid email address",
       ],
     },
+
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
-      select: false, // Never return password by default in queries
+      select: false,
     },
+
     role: {
       type: String,
       enum: ["admin", "staff"],
       default: "staff",
     },
+
     avatar: {
       type: String,
       default: "",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// Hash password before saving, only if it was modified
+// Hash password before saving
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) {
+    return next();
+  }
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+
   next();
 });
 
-// Instance method to compare a plaintext password with the hashed one
+// Compare password
 UserSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Remove sensitive fields when converting to JSON
+// Remove sensitive fields from JSON response
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();
+
   delete obj.password;
   delete obj.__v;
+
   return obj;
 };
 
